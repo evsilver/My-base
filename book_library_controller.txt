@@ -1,0 +1,53 @@
+from book_library_service import book_service
+
+print("Библиотека приветствует вас!")
+print("Добавить книгу(1)\nУдалить книгу(2)\nПоиск нужной книги(3)\nПросмотр списка книг(4)\nИзменение статуса книги(5)"
+      "\nВыход(6)"
+      )
+
+class BookController:
+    def all_book_mode(self):
+        """Выполняет операцию, выбранную пользователем"""
+        while True:
+            command = int(input("Введите номер команды: "))
+            if command == 1:
+                new_title = str(input("Введите название новой книги: "))
+                new_author = str(input("Введите имя автора: "))
+                year = int(input("Введите год издания книги: "))
+                print(book_service.add_book(title=new_title, author=new_author, year=year))
+                continue
+            if command == 2:
+                book_id = int(input("Введите 'id' удаляемой книги: "))
+                if book_id <= len(book_service.view_books()):
+                    print(book_service.delete_book(id=book_id))
+                else:
+                    print("Книги с таким номером не сущетвует!")
+                continue
+            if command == 3:
+                search_title = str(input("Введите название книги: "))
+                if search_title:
+                    print(book_service.search_book_by_parameters(search_title=search_title))
+                    continue
+                search_author = str(input("Введите имя автора: "))
+                if search_author:
+                    print(book_service.search_book_by_parameters(search_author=search_author))
+                    continue
+                search_id = int(input("Введите 'id' книги: "))
+                if id:
+                    print(book_service.search_book_by_parameters(search_id=search_id))
+                    continue
+            if command == 4:
+                print(book_service.view_books())
+            if command == 5:
+                book_id = int(input("Введите 'id' книги: "))
+                new_status = str(input("Введите статус книги: "))
+                if new_status == "выдана":
+                    print(book_service.change_status_book(book_id=book_id, new_status=new_status))
+                else:
+                    print("Статус не принят! принимаеся статус 'выдана'!")
+                continue
+            if command == 6:
+                exit()
+
+controller = BookController()
+print(controller.all_book_mode())

@@ -1,0 +1,26 @@
+from book_library_repository import book_repository
+
+class BookLibraryService:
+    def search_book_by_parameters(self, search_id: None, search_title: None, search_author: None) -> int:
+        """Позволяет пользователю найти книгу в БД"""
+        return book_repository.search_book_by_parameters(search_id, search_title, search_author)
+
+    def view_books(self) -> str:
+        """Метод показывает все книги из БД"""
+        return book_repository.view_books()
+
+    def add_book(self, title: str, author: int, year: int) -> str:
+        """Метод добавляет книгу в БД"""
+        return book_repository.add_book(title, author, year)
+
+    def delete_book(self, id: int) -> str:
+        """Метод позволяет удалить книгу"""
+        return book_repository.delete_book(id)
+
+    def change_status_book(self, book_id: int, new_status: str):
+        """Метод позволяет изменить статус книги"""
+        return book_repository.change_status_book(book_id, new_status)
+
+
+
+book_service = BookLibraryService()

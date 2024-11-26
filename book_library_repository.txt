@@ -1,0 +1,61 @@
+from sqlalchemy import Table, insert, delete, select, update
+from book_library_tables import metadata, eng
+
+class BookLibraryRepository:
+    def search_book_by_parameters(self, search_id: None, search_title: None, search_author: None) -> str:
+        """Получение из БД книги по одному из параметров(title/author/year)"""
+        table = Table('books', metadata, autoload_with=eng)
+        with eng.connect() as connection:
+            if search_id:
+                return connection.execute(select(table).where(table.c.id==search_id))
+            if search_title:
+                return connection.execute(select(table).where(table.c.title==search_title))
+            if search_author:
+                return connection.execute(select(table).where(table.c.author==search_author))
+
+    def view_books(self) -> str:
+        """Демонстрация всех книг"""
+        table = Table('books', metadata, autoload_with=eng)
+        with eng.connect() as connection:
+            base = connection.execute(
+                select(table)
+            )
+            return base.all()
+
+    def add_book(self, title: str, author: int, year: int) -> str:
+        """Добавление новой книги в БД"""
+        table = Table('books', metadata, autoload_with=eng)
+        with eng.connect() as connection:
+            connection.execute(
+                insert(table),
+                [
+                    {'title': title, 'author': author, 'year': year}
+
+                ]
+            )
+            connection.commit()
+            return "Новая книга добавлена!"
+
+    def delete_book(self, id: int) -> str:
+        """Удаление книги из БД"""
+        table = Table('books', metadata, autoload_with=eng)
+        with eng.connect() as connection:
+            connection.execute(
+                delete(table).where(table.c.id == id)
+            )
+            connection.commit()
+            return "Книга удалена!"
+
+    def change_status_book(self, book_id: int, new_status: str) -> str:
+        """Изменение статуса книги"""
+        table = Table('books', metadata, autoload_with=eng)
+        with eng.connect() as connection:
+            connection.execute(
+                update(table).where(
+                    table.c.id == book_id).values(status=new_status)
+                )
+            connection.commit()
+            return "Статус книги успешно изменен!"
+
+
+book_repository = BookLibraryRepository()
